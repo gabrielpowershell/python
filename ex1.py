@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
 
 """
-This program queries Company QAD VPC for servers
+This program queries Company for servers
 that dont have the gdriver network attached.
-Program attach the correct AZ ENI to an RHEL intance
+Program attach the correct AZ ENI
 It only attach the interface to running instances
 """
 
@@ -41,8 +41,8 @@ def collect_subnets():
 
 def query_gdriver():
     """
-    FInds exact subnet and security group that the network_a
-    needs to attached to
+    FInds exact subnet and security group that the network 
+    needs to be attached to
     """ 
 
     global gdriver
@@ -96,7 +96,7 @@ if __name__ == "__main__":
             print(json_datalist)
             result_gdriver = query_gdriver()
             print('The following subnet has been identify', result_gdriver)
-            network_interface = ec2_client.create_network_interface(SubnetId=result_gdriver[0], Description = 'Gigamon', Groups = [result_gdriver[1]])
+            network_interface = ec2_client.create_network_interface(SubnetId=result_gdriver[0], Description = 'Gdriver', Groups = [result_gdriver[1]])
             network_eni = network_interface['NetworkInterface']['NetworkInterfaceId']
             print('the following ENI will be attached to instance ', instance.id, network_eni)
             attach_network_interface = ec2_client.attach_network_interface(NetworkInterfaceId = network_eni, InstanceId = instance.id, DeviceIndex = 1)
