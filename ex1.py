@@ -2,7 +2,7 @@
 
 """
 This program queries Company QAD VPC for servers
-that dont have the gigamon network attached.
+that dont have the gdriver network attached.
 Program attach the correct AZ ENI to an RHEL intance
 It only attach the interface to running instances
 """
@@ -39,23 +39,23 @@ def collect_subnets():
     json_subnet = json.dumps(list_subnet)
     print(json_subnet)
 
-def query_gigamon():
+def query_gdriver():
     """
     FInds exact subnet and security group that the network_a
     needs to attached to
     """ 
 
-    global gigamon
+    global gdriver
     if vpc_id == 'vpc-34de2a53' and network_az == 'us-east-1a':
-        gigamon = ('subnet-ef9dd0c2', 'sg-8f05b6f3')
+        gdriver = ('subnet-ef9dd0c2', 'sg-8f05b6f3')
     elif vpc_id == 'vpc-34de2a53' and network_az == 'us-east-1b':
-        gigamon = ('subnet-ef9dd0c2', 'sg-8f05b6f3')
+        gdriver = ('subnet-ef9dd0c2', 'sg-8f05b6f3')
     elif vpc_id == 'vpc-34de2a53' and network_az == 'us-east-1c':
-        gigamon = ('subnet-830363db', 'sg-8f05b6f3')
+        gdriver = ('subnet-830363db', 'sg-8f05b6f3')
     elif vpc_id == 'vpc-b8e873df' and network_az == 'us-east-1c':
-        gigamon = ('subnet-e73608bf', 'sg-69a0be12')
+        gdriver = ('subnet-e73608bf', 'sg-69a0be12')
 
-    return gigamon
+    return gdriver
 
 
 if __name__ == "__main__":
@@ -78,13 +78,13 @@ if __name__ == "__main__":
 
         if instance_state == 'running' and company_owner == 'True':
             i = 0
-            gigamon_network = 'False'
+            gdriver_network = 'False'
             while i < list_size:
                 subnet_id = network_eni[i].subnet_id
                 i += 1
                 for subnet_find in subnet_main:
                     if subnet_find in subnet_id:
-                        gigamon_network = 'True'
+                        gdriver_network = 'True'
                         break
             datalist = {
 
@@ -94,9 +94,9 @@ if __name__ == "__main__":
             }
             json_datalist = json.dumps(datalist)
             print(json_datalist)
-            result_gigamon = query_gigamon()
-            print('The following subnet has been identify', result_gigamon)
-            network_interface = ec2_client.create_network_interface(SubnetId=result_gigamon[0], Description = 'Gigamon', Groups = [result_gigamon[1]])
+            result_gdriver = query_gdriver()
+            print('The following subnet has been identify', result_gdriver)
+            network_interface = ec2_client.create_network_interface(SubnetId=result_gdriver[0], Description = 'Gigamon', Groups = [result_gdriver[1]])
             network_eni = network_interface['NetworkInterface']['NetworkInterfaceId']
             print('the following ENI will be attached to instance ', instance.id, network_eni)
             attach_network_interface = ec2_client.attach_network_interface(NetworkInterfaceId = network_eni, InstanceId = instance.id, DeviceIndex = 1)
