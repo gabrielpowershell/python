@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 """
-This program queries CME QAD VPC for servers
+This program queries Company QAD VPC for servers
 that dont have the gigamon network attached.
 Program attach the correct AZ ENI to an RHEL intance
 It only attach the interface to running instances
@@ -73,10 +73,10 @@ if __name__ == "__main__":
 
         for owner_find in owner_main:
             if owner_find in image_owner:
-                cme_owner = 'True'
+                company_owner = 'True'
                 break
 
-        if instance_state == 'running' and cme_owner == 'True':
+        if instance_state == 'running' and company_owner == 'True':
             i = 0
             gigamon_network = 'False'
             while i < list_size:
