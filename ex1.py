@@ -15,8 +15,8 @@ start_time = time.time()
 
 ec2 = boto3.resource('ec2')
 ec2_client = boto3.client('ec2')
-subnet_main = ['subnet-ba8b1090', 'subnet-e53608bd', 'subnet-e53608bd']
-owner_main = ['30995619944', '309956199498']
+subnet_main = ['subnet-ba8b1090', 'subnet-e53608bd', 'subnet-e53608bd'] # Check instances on these subnets
+owner_main = ['30995619944', '309956199498'] # this uses the owner of the AMI for reference on what instance to check
 groups_main = ['']
 
 
@@ -41,7 +41,7 @@ def collect_subnets():
 
 def query_gdriver():
     """
-    FInds exact subnet and security group that the network 
+    Findds exact subnet and security group that the network 
     needs to be attached to
     """ 
 
